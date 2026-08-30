@@ -1,30 +1,863 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hailey Theurer</title>
-<meta name="description" content="Hailey Theurer">
+<title>Hailey's Photographs</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&display=swap">
+
+<script type="application/json" id="portfolio-state">{"version": 2, "meta": {"title": "Hailey's Photographs", "tagline": "Hailey Theurer \u00b7 people, wildlife, and place \u00b7 made on a phone"}, "photos": []}</script>
+
 <style>
-  :root { color-scheme: light; }
+  :root {
+    --paper:      #F6F4F0;
+    --ink:        #14151A;
+    --muted:      #6E6F76;
+    --faint:      #9A9AA0;
+    --hairline:   #DDD8D0;
+    --accent:     #2F4F45;
+    --accent-ink: #F6F4F0;
+    --scrim:      #0B0C0D;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #0E0F11;
+      --ink:        #ECEAE5;
+      --muted:      #8C8E95;
+      --faint:      #6A6C72;
+      --hairline:   #24262A;
+      --accent:     #8FB3A2;
+      --accent-ink: #0E0F11;
+      --scrim:      #060607;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:      #0E0F11;
+    --ink:        #ECEAE5;
+    --muted:      #8C8E95;
+    --faint:      #6A6C72;
+    --hairline:   #24262A;
+    --accent:     #8FB3A2;
+    --accent-ink: #0E0F11;
+    --scrim:      #060607;
+  }
+
+  * { box-sizing: border-box; }
   body {
     margin: 0;
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    background: #ffffff;
-    color: #111111;
-    font: 400 1rem/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Karla", ui-sans-serif, system-ui, "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-  main { padding: 2rem; text-align: center; }
-  h1 { font-size: 1.5rem; font-weight: 600; margin: 0 0 .5rem; letter-spacing: -0.01em; }
-  p { margin: 0; color: #666666; }
+  :focus-visible { outline: 1px solid var(--accent); outline-offset: 4px; }
+
+  .wrap { max-width: min(2100px, 93vw); margin: 0 auto; padding: clamp(40px, 5vw, 88px) clamp(22px, 3vw, 60px) 140px; }
+
+  /* ---- masthead ---- */
+  header.mast {
+    display: flex; flex-wrap: wrap; align-items: flex-end; gap: 28px 40px;
+    padding-bottom: 28px; margin-bottom: clamp(48px, 8vw, 104px);
+    border-bottom: 1px solid var(--ink);
+  }
+  .mast .identity { flex: 1 1 340px; min-width: 0; }
+  h1 {
+    font-family: "Bodoni Moda", Didot, Georgia, serif;
+    font-weight: 400; font-size: clamp(40px, 7vw, 78px); line-height: 0.98;
+    letter-spacing: -0.018em; margin: 0; text-wrap: balance;
+  }
+  .tagline, .band-count, .cap-note, .status {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase;
+  }
+  .tagline { color: var(--muted); margin: 20px 0 0; }
+  h1[contenteditable]:focus, .tagline[contenteditable]:focus { outline: none; box-shadow: 0 1px 0 var(--accent); }
+  .mast .actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+
+  button {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; cursor: pointer;
+    border-radius: 0; border: 1px solid var(--hairline); background: transparent; color: var(--ink);
+    padding: 11px 18px; transition: border-color .2s ease, color .2s ease, background .2s ease;
+  }
+  button:hover { border-color: var(--ink); }
+  button.primary { border-color: var(--ink); }
+  button.primary:hover { background: var(--ink); color: var(--paper); }
+  button.danger:hover { border-color: #A8453C; color: #A8453C; }
+  button[disabled] { opacity: .4; cursor: default; }
+
+  .status { color: var(--faint); min-height: 1em; white-space: nowrap; letter-spacing: .16em; }
+  .status.warn { color: #A8453C; white-space: normal; max-width: 34ch; text-transform: none; letter-spacing: .04em; }
+
+  /* ---- sections ---- */
+  .band { margin-bottom: clamp(64px, 10vw, 128px); }
+  .band:last-child { margin-bottom: 0; }
+  .band-head {
+    display: flex; align-items: baseline; gap: 20px;
+    padding-bottom: 12px; margin-bottom: clamp(26px, 4vw, 48px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .band-head h2 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 500; font-size: 11px; letter-spacing: .26em; text-transform: uppercase;
+    margin: 0; color: var(--ink);
+  }
+  .band-count { color: var(--faint); margin-left: auto; letter-spacing: .16em; }
+  .band.lead .band-head { border-bottom-color: var(--ink); }
+  .band.lead .band-head h2 { color: var(--ink); }
+
+  /* ---- gallery ---- */
+  /* Justified rows: each row is scaled to the exact page width and every photo
+     in it shares one height, so there are no ragged gaps and reading order
+     still runs left to right. Row building is in JS (it needs the aspect ratios). */
+  .gallery { --gap: clamp(14px, 1.4vw, 26px); }
+  .row {
+    display: flex; gap: var(--gap); margin-bottom: var(--gap); align-items: flex-start;
+  }
+  .row:last-child { margin-bottom: 0; }
+
+  figure {
+    margin: 0; position: relative; min-width: 0;
+    background: none; box-shadow: none; border-radius: 0;
+  }
+  figure img {
+    display: block; width: 100%; height: auto; border-radius: 0; object-fit: cover;
+    background: color-mix(in srgb, var(--hairline) 60%, transparent);
+  }
+  .shot {
+    display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in;
+  }
+  .shot:hover img { opacity: .86; }
+  .shot img { opacity: 0; transition: opacity .7s ease; }
+  .shot img.in { opacity: 1; }
+  .shot:focus-visible { outline: 1px solid var(--accent); outline-offset: 6px; }
+
+  figcaption { padding: 14px 0 0; border: 0; }
+  .cap-title {
+    font-family: "Bodoni Moda", Didot, Georgia, serif;
+    font-style: italic; font-weight: 400; font-size: 17px; line-height: 1.3; color: var(--ink);
+  }
+  .cap-note { color: var(--faint); margin-top: 7px; line-height: 1.7; }
+
+  /* ---- empty / dropzone ---- */
+  .empty {
+    border: 1px solid var(--hairline); padding: clamp(64px, 12vw, 140px) 28px;
+    text-align: center; color: var(--muted);
+  }
+  .empty h2 {
+    font-family: "Bodoni Moda", Didot, Georgia, serif; font-weight: 400; color: var(--ink);
+    font-size: clamp(26px, 4vw, 38px); margin: 0 0 14px; font-style: italic;
+  }
+  .empty p { margin: 0 auto 30px; max-width: 46ch; }
+  body.dragging .empty { border-color: var(--accent); color: var(--ink); }
+  #drop-veil {
+    position: fixed; inset: 0; z-index: 40; display: none; place-items: center;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    border: 1px solid var(--ink);
+    font-family: "Bodoni Moda", Didot, Georgia, serif; font-style: italic; font-size: 32px;
+  }
+  body.dragging #drop-veil { display: grid; }
+
+  /* ---- lightbox ---- */
+  #lightbox {
+    position: fixed; inset: 0; z-index: 50; display: none; background: var(--scrim);
+    grid-template-rows: 1fr auto; padding: clamp(18px, 3vw, 44px);
+  }
+  #lightbox.open { display: grid; }
+  .lb-stage { position: relative; display: grid; place-items: center; min-height: 0; }
+  .lb-stage img { width: 100%; height: 100%; min-height: 0; object-fit: contain; display: block; }
+  .lb-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: none; color: rgba(255,255,255,.5); border: 0; border-radius: 0;
+    width: 56px; height: 56px; font-size: 22px; display: grid; place-items: center;
+    transition: color .2s ease;
+  }
+  .lb-nav:hover { color: #FFF; background: none; }
+  .lb-prev { left: 0; } .lb-next { right: 0; }
+  .lb-bar {
+    display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 28px;
+    padding-top: 20px; margin-top: 22px; border-top: 1px solid rgba(255,255,255,.14); color: #E8E6E1;
+  }
+  .lb-fields { flex: 1 1 320px; min-width: 0; display: grid; gap: 10px; }
+  .lb-bar input {
+    width: 100%; background: transparent; border: 0; border-bottom: 1px solid rgba(255,255,255,.18);
+    color: #FFF; padding: 6px 0;
+    font-family: "Bodoni Moda", Didot, Georgia, serif; font-style: italic; font-size: 18px;
+  }
+  .lb-bar input.note {
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-style: normal;
+    font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #B9BAB6;
+  }
+  .lb-bar input::placeholder { color: rgba(255,255,255,.3); }
+  .lb-bar input:focus { outline: none; border-bottom-color: rgba(255,255,255,.6); }
+  .lb-tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .lb-tools button {
+    background: none; border-color: rgba(255,255,255,.24); color: #D9D8D3; padding: 9px 14px;
+  }
+  .lb-tools button:hover { border-color: #FFF; color: #FFF; }
+  .lb-tools button.on { background: #FFF; border-color: #FFF; color: #101113; }
+  .lb-tools button.armed { background: #A8453C; border-color: #A8453C; color: #FFF; }
+  .lb-tools .sep { width: 1px; height: 20px; background: rgba(255,255,255,.18); }
+  .lb-count { color: rgba(255,255,255,.45); align-self: center;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; }
+
+  .read-only .owner-only { display: none !important; }
+  .read-only #lb-title, .read-only #lb-note { pointer-events: none; user-select: text; }
+  .read-only #lb-title::placeholder, .read-only #lb-note::placeholder { color: transparent; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .shot img { opacity: 1; }
+  }
 </style>
-</head>
-<body>
-  <main>
-    <h1>Hailey Theurer</h1>
-    <p>Site coming soon.</p>
-  </main>
-</body>
-</html>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="identity">
+      <h1 id="site-title">Hailey's Photographs</h1>
+      <p class="tagline" id="site-tagline">A working portfolio</p>
+    </div>
+    <div class="actions">
+      <span class="status" id="status"></span>
+      <button class="primary owner-only" id="add-btn">Add photos</button>
+    </div>
+  </header>
+
+  <div id="sections"></div>
+
+  <div class="empty" id="empty" hidden>
+    <h2>Nothing here yet</h2>
+    <p>Drop photos anywhere on this page, or pick them from your computer. JPEG, PNG, and HEIC straight off an iPhone all work. They're stored with the page, so they'll be here next time you open it.</p>
+    <button class="primary owner-only" id="empty-btn">Choose photos</button>
+  </div>
+</div>
+
+<input type="file" id="file-input" accept="image/*,.heic,.heif,image/heic,image/heif" multiple hidden>
+<div id="drop-veil">Drop to add</div>
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo">
+  <div class="lb-stage">
+    <img id="lb-img" alt="">
+    <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous photo">&#8592;</button>
+    <button class="lb-nav lb-next" id="lb-next" aria-label="Next photo">&#8594;</button>
+  </div>
+  <div class="lb-bar">
+    <div class="lb-fields">
+      <input id="lb-title" aria-label="Photo title" readonly tabindex="-1">
+      <input id="lb-note" class="note" aria-label="Photo notes" readonly tabindex="-1">
+    </div>
+    <span class="lb-count" id="lb-count"></span>
+    <div class="lb-tools">
+      <button id="lb-pick" class="owner-only" title="Show in Selected work">&#9734; Select</button>
+      <span class="sep owner-only" aria-hidden="true"></span>
+      <button data-group="people" class="owner-only">People</button>
+      <button data-group="wildlife" class="owner-only">Wildlife</button>
+      <button data-group="place" class="owner-only">Light and place</button>
+      <span class="sep owner-only" aria-hidden="true"></span>
+      <button id="lb-back" class="owner-only" title="Move earlier">&#8592;</button>
+      <button id="lb-fwd" class="owner-only" title="Move later">&#8594;</button>
+      <button id="lb-del" class="danger owner-only">Delete</button>
+      <button id="lb-close">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- libheif HEIC decoder removed: only the upload path used it, and uploading is gone -->
+
+
+<script>
+(() => {
+  "use strict";
+
+  const MAX_EDGE = 1800;
+  const JPEG_Q = 0.84;
+
+  const GROUPS = [
+    { key: "people",   title: "People" },
+    { key: "wildlife", title: "Wildlife" },
+    { key: "place",    title: "Light and place" },
+  ];
+  const GROUP_TITLES = Object.fromEntries(GROUPS.map((g) => [g.key, g.title]));
+
+  const $ = (id) => document.getElementById(id);
+  const sectionsEl = $("sections"), emptyBox = $("empty"), statusEl = $("status");
+  const fileInput = $("file-input"), lb = $("lightbox");
+
+  let state = { photos: [], meta: { title: "", tagline: "" } };
+  const blobUrls = new Map();
+  const pendingFiles = new Map();
+  const deletedPaths = new Set();
+  let canWrite = true, mode = "files", pageSource = null;
+  let saveTimer = null, saving = false, dirty = false;
+  let flat = [];          // display order: photo objects, selected section first
+  let lbIndex = -1;       // position within `flat`
+
+  /* ---------- state ---------- */
+
+  function readEmbedded() {
+    try {
+      const parsed = JSON.parse($("portfolio-state").textContent.trim());
+      if (parsed && Array.isArray(parsed.photos)) return parsed;
+    } catch (_) {}
+    return null;
+  }
+
+  async function loadState() {
+    const embedded = readEmbedded();
+    if (embedded && embedded.photos.length) { mode = "html"; return embedded; }
+    try {
+      const res = await fetch("data/photos.json", { cache: "no-store" });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && Array.isArray(json.photos)) return json;
+      }
+    } catch (_) {}
+    return embedded || { photos: [], meta: {} };
+  }
+
+  /* ---------- rendering ---------- */
+
+  const srcFor = (p) => blobUrls.get(p.id) || p.data || `photos/${p.id}.jpg`;
+
+  const io = "IntersectionObserver" in window
+    ? new IntersectionObserver((entries, obs) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); } });
+      }, { rootMargin: "120px" })
+    : null;
+
+  function figureFor(p) {
+    const fig = document.createElement("figure");
+    if (!p.title && !p.note) fig.classList.add("bare");
+
+    const btn = document.createElement("button");
+    btn.className = "shot";
+    btn.setAttribute("aria-label", p.title ? `Open ${p.title}` : "Open photo");
+    const img = document.createElement("img");
+    img.src = srcFor(p);
+    img.alt = p.title || "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    if (p.w && p.h) { img.width = p.w; img.height = p.h; }
+    img.addEventListener("error", () => { img.style.display = "none"; });
+    img.addEventListener("load", () => img.classList.add("in"));
+    if (io) io.observe(img); else img.classList.add("in");
+    btn.appendChild(img);
+    btn.addEventListener("click", () => openLightbox(flat.indexOf(p)));
+    fig.appendChild(btn);
+
+    if (p.title || p.note) {
+      const cap = document.createElement("figcaption");
+      if (p.title) {
+        const t = document.createElement("div");
+        t.className = "cap-title"; t.textContent = p.title; cap.appendChild(t);
+      }
+      if (p.note) {
+        const n = document.createElement("div");
+        n.className = "cap-note"; n.textContent = p.note; cap.appendChild(n);
+      }
+      fig.appendChild(cap);
+    }
+    return fig;
+  }
+
+  function buildSections() {
+    const sections = [];
+    // Selected keeps its own running order (pickAt); anything newly picked
+    // in the page has no pickAt and falls to the end. Sort is stable.
+    const picks = state.photos.filter((p) => p.pick)
+      .sort((a, b) => (a.pickAt ?? 1e9) - (b.pickAt ?? 1e9));
+    if (picks.length) sections.push({ key: "selected", title: "Selected work", items: picks, lead: true });
+    for (const g of GROUPS) {
+      const items = state.photos.filter((p) => p.group === g.key);
+      if (items.length) sections.push({ key: g.key, title: g.title, items });
+    }
+    const unfiled = state.photos.filter((p) => !p.group);
+    if (unfiled.length) sections.push({ key: "recent", title: "Recently added", items: unfiled });
+    return sections;
+  }
+
+  function rowsFor(items, width) {
+    // greedy justified rows: keep adding until the row's height drops to target
+    const target = width >= 2200 ? 430 : width >= 1500 ? 390 : width >= 1100 ? 340 : 300;
+    const maxPerRow = width >= 2200 ? 5 : width >= 1100 ? 4 : 3;
+    const single = width < 560;
+    const gap = 20;
+    const rows = [];
+    let row = [], sum = 0;
+    const ar = (p) => (p.w && p.h ? p.w / p.h : 1);
+    for (const p of items) {
+      row.push(p); sum += ar(p);
+      const avail = width - gap * (row.length - 1);
+      if (single || row.length >= maxPerRow || avail / sum <= target) {
+        rows.push({ items: row, sum, gap });
+        row = []; sum = 0;
+      }
+    }
+    if (row.length) rows.push({ items: row, sum, gap, last: true });
+    return { rows, target };
+  }
+
+  function paintGrid(grid, items) {
+    const width = grid.clientWidth;
+    if (!width) return;
+    const gap = parseFloat(getComputedStyle(grid).getPropertyValue("--gap")) || 20;
+    const { rows, target } = rowsFor(items, width);
+    grid.innerHTML = "";
+    rows.forEach((r) => {
+      const avail = width - gap * (r.items.length - 1);
+      let h = avail / r.sum;
+      if (r.last && h > target * 1.3) h = target;   // a lone last photo shouldn't balloon
+      const rowEl = document.createElement("div");
+      rowEl.className = "row";
+      r.items.forEach((p) => {
+        const ratio = p.w && p.h ? p.w / p.h : 1;
+        const fig = figureFor(p);
+        fig.style.width = Math.floor(ratio * h) + "px";
+        fig.style.flex = "0 0 auto";
+        fig.querySelector("img").style.height = Math.round(h) + "px";
+        rowEl.appendChild(fig);
+      });
+      grid.appendChild(rowEl);
+    });
+  }
+
+  function render() {
+    const sections = buildSections();
+    flat = [];
+    sectionsEl.innerHTML = "";
+
+    for (const sec of sections) {
+      const wrap = document.createElement("section");
+      wrap.className = "band" + (sec.lead ? " lead" : "");
+
+      const head = document.createElement("div");
+      head.className = "band-head";
+      const h = document.createElement("h2");
+      h.textContent = sec.title;
+      head.appendChild(h);
+      const count = document.createElement("span");
+      count.className = "band-count";
+      count.textContent = sec.items.length === 1 ? "1 photo" : `${sec.items.length} photos`;
+      head.appendChild(count);
+      wrap.appendChild(head);
+
+      const grid = document.createElement("div");
+      grid.className = "gallery";
+      wrap.appendChild(grid);
+      sectionsEl.appendChild(wrap);
+
+      sec.items.forEach((p) => { if (!flat.includes(p)) flat.push(p); });
+      paintGrid(grid, sec.items);
+      grid._items = sec.items;
+    }
+
+    emptyBox.hidden = state.photos.length > 0;
+    sectionsEl.hidden = state.photos.length === 0;
+  }
+
+  let relayoutTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(relayoutTimer);
+    relayoutTimer = setTimeout(() => {
+      document.querySelectorAll(".gallery").forEach((g) => { if (g._items) paintGrid(g, g._items); });
+    }, 150);
+  });
+
+  function applyMeta() {
+    if (state.meta && state.meta.title) $("site-title").textContent = state.meta.title;
+    if (state.meta && state.meta.tagline) $("site-tagline").textContent = state.meta.tagline;
+  }
+
+  function setStatus(text, warn) {
+    statusEl.textContent = text || "";
+    statusEl.classList.toggle("warn", !!warn);
+  }
+
+  /* ---------- adding photos ---------- */
+
+  const newId = () => "p" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+
+  const isHeic = (file) =>
+    /hei[cf]/i.test(file.type || "") || /\.hei[cf]$/i.test(file.name || "");
+
+  const isPicture = (file) => (file.type || "").startsWith("image/") || isHeic(file);
+
+  let heifLib = null;
+  async function heicToCanvas(file) {
+    if (!heifLib) {
+      if (typeof libheif === "undefined") throw new Error("no heic decoder");
+      heifLib = typeof libheif === "function" ? await libheif() : libheif;
+    }
+    const buf = new Uint8Array(await file.arrayBuffer());
+    const frames = new heifLib.HeifDecoder().decode(buf);
+    if (!frames || !frames.length) throw new Error("empty heic");
+    const frame = frames[0];
+    const w = frame.get_width(), h = frame.get_height();
+    const canvas = document.createElement("canvas");
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    const pixels = ctx.createImageData(w, h);
+    await new Promise((resolve, reject) => {
+      frame.display(pixels, (out) => (out ? resolve() : reject(new Error("heic decode failed"))));
+    });
+    ctx.putImageData(pixels, 0, 0);
+    return { source: canvas, sw: w, sh: h };
+  }
+
+  function loadNative(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => { URL.revokeObjectURL(url); resolve({ source: img, sw: img.naturalWidth, sh: img.naturalHeight }); };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("not an image")); };
+      img.src = url;
+    });
+  }
+
+  async function shrink(file) {
+    let loaded;
+    if (isHeic(file)) {
+      try { loaded = await heicToCanvas(file); }
+      catch (err) { loaded = await loadNative(file); }
+    } else {
+      loaded = await loadNative(file);
+    }
+    const { source, sw, sh } = loaded;
+    const scale = Math.min(1, MAX_EDGE / Math.max(sw, sh));
+    const w = Math.max(1, Math.round(sw * scale));
+    const h = Math.max(1, Math.round(sh * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(source, 0, 0, w, h);
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", JPEG_Q));
+    if (!blob) throw new Error("encode failed");
+    return { blob, w, h };
+  }
+
+  const toDataUrl = (blob) => new Promise((resolve, reject) => {
+    const fr = new FileReader();
+    fr.onload = () => resolve(fr.result);
+    fr.onerror = () => reject(fr.error);
+    fr.readAsDataURL(blob);
+  });
+
+  async function addFiles(list) {
+    if (!canWrite) return;
+    const files = Array.from(list).filter(isPicture);
+    if (!files.length) return;
+    let added = 0;
+    for (let i = 0; i < files.length; i++) {
+      setStatus(`Preparing ${i + 1} of ${files.length}…`);
+      try {
+        const { blob, w, h } = await shrink(files[i]);
+        const id = newId();
+        const photo = { id, w, h, title: "", note: "", added: new Date().toISOString().slice(0, 10) };
+        if (mode === "html") photo.data = await toDataUrl(blob);
+        else pendingFiles.set(`photos/${id}.jpg`, blob);
+        blobUrls.set(id, URL.createObjectURL(blob));
+        state.photos.push(photo);
+        added++;
+      } catch (err) {
+        setStatus(isHeic(files[i]) ? `Couldn't read ${files[i].name} — that HEIC didn't decode` : `Couldn't read ${files[i].name}`, true);
+      }
+    }
+    if (added) { render(); queueSave(); }
+  }
+
+  /* ---------- saving ---------- */
+
+  function queueSave() {
+    dirty = true;
+    setStatus("Saving…");
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(save, 700);
+  }
+
+  const photoRecord = (p, withData) => {
+    const rec = {
+      id: p.id, w: p.w, h: p.h, title: p.title || "", note: p.note || "", added: p.added || "",
+    };
+    if (p.group) rec.group = p.group;
+    if (p.pick) rec.pick = true;
+    if (typeof p.pickAt === "number") rec.pickAt = p.pickAt;
+    if (withData) rec.data = p.data || "";
+    return rec;
+  };
+
+  function serialize() {
+    return JSON.stringify({
+      version: 2,
+      meta: {
+        title: $("site-title").textContent.trim(),
+        tagline: $("site-tagline").textContent.trim(),
+      },
+      photos: state.photos.map((p) => photoRecord(p, false)),
+    });
+  }
+
+  async function htmlDocument() {
+    if (pageSource === null) {
+      const res = await fetch(location.href, { cache: "no-store" });
+      pageSource = await res.text();
+    }
+    const payload = JSON.stringify({
+      version: 2,
+      meta: JSON.parse(serialize()).meta,
+      photos: state.photos.map((p) => photoRecord(p, true)),
+    });
+    const open = '<script type="application/json" id="portfolio-state">';
+    const start = pageSource.indexOf(open);
+    if (start === -1) throw new Error("state block missing");
+    const end = pageSource.indexOf("</" + "script>", start);
+    return pageSource.slice(0, start + open.length) + payload + pageSource.slice(end);
+  }
+
+  async function save() {
+    if (saving || !dirty || !canWrite) return;
+    saving = true; dirty = false;
+    const sending = new Map(pendingFiles);
+    const removing = new Set(deletedPaths);
+    try {
+      const api = await window.claude?.use?.("artifact");
+      if (!api) { canWrite = false; document.body.classList.add("read-only"); setStatus(""); return; }
+
+      if (mode === "files") {
+        const files = { "data/photos.json": { content: serialize(), contentType: "application/json" } };
+        sending.forEach((blob, path) => { files[path] = blob; });
+        removing.forEach((path) => { files[path] = null; });
+        try {
+          await api.publish(files);
+          sending.forEach((_, path) => pendingFiles.delete(path));
+          removing.forEach((path) => deletedPaths.delete(path));
+          setStatus("Saved");
+        } catch (err) {
+          if (err && (err.code === "capability_disabled" || err.code === "capability_removed")) {
+            mode = "html";
+            for (const p of state.photos) {
+              if (!p.data) {
+                const blob = pendingFiles.get(`photos/${p.id}.jpg`);
+                if (blob) p.data = await toDataUrl(blob);
+              }
+            }
+            dirty = true; saving = false;
+            return save();
+          }
+          throw err;
+        }
+      } else {
+        await api.publish(await htmlDocument());
+        setStatus("Saved");
+      }
+    } catch (err) {
+      const code = err && err.code;
+      if (code === "conflict") {
+        setStatus("Someone else saved first — reloading");
+      } else if (code === "not_writer" || code === "not_granted" || code === "not_declared" || code === "consent_required") {
+        canWrite = false;
+        document.body.classList.add("read-only");
+        setStatus("You're viewing this portfolio read-only");
+      } else if (code === "too_large") {
+        setStatus("That photo pushed the page past its size limit. Remove a photo and try again.", true);
+        dirty = true;
+      } else if (code === "rate_limited") {
+        setStatus("Saving too fast — retrying in a moment");
+        dirty = true;
+        setTimeout(() => { saving = false; save(); }, 4000);
+        return;
+      } else {
+        setStatus("Couldn't save — your photos are still here, try again", true);
+        dirty = true;
+      }
+    } finally {
+      saving = false;
+      if (dirty && canWrite) { clearTimeout(saveTimer); saveTimer = setTimeout(save, 2500); }
+      else if (!dirty) setTimeout(() => { if (!dirty && statusEl.textContent === "Saved") setStatus(""); }, 2200);
+    }
+  }
+
+  /* ---------- lightbox ---------- */
+
+  let deleteArmed = false, deleteTimer = null;
+  function resetDelete() {
+    deleteArmed = false;
+    clearTimeout(deleteTimer);
+    const b = $("lb-del");
+    b.textContent = "Delete";
+    b.classList.remove("armed");
+  }
+
+  const current = () => (lbIndex >= 0 ? flat[lbIndex] : null);
+
+  function syncLightboxControls() {
+    const p = current();
+    if (!p) return;
+    $("lb-pick").classList.toggle("on", !!p.pick);
+    $("lb-pick").textContent = p.pick ? "★ Selected" : "☆ Select";
+    document.querySelectorAll("[data-group]").forEach((b) => {
+      b.classList.toggle("on", p.group === b.dataset.group);
+    });
+    $("lb-count").textContent = `${lbIndex + 1} / ${flat.length}`;
+  }
+
+  function openLightbox(i) {
+    if (i < 0 || i >= flat.length) return;
+    lbIndex = i;
+    resetDelete();
+    const p = flat[i];
+    $("lb-img").src = srcFor(p);
+    $("lb-img").alt = p.title || "";
+    $("lb-title").value = p.title || "";
+    $("lb-note").value = p.note || "";
+    // Nothing here is editable, so an empty caption field is just a stray
+    // underline. Hide each one unless the photo actually has that text.
+    $("lb-title").hidden = !p.title;
+    $("lb-note").hidden = !p.note;
+    syncLightboxControls();
+    lb.classList.add("open");
+    $("lb-close").focus();
+  }
+
+  const closeLightbox = () => { resetDelete(); lb.classList.remove("open"); lbIndex = -1; };
+
+  const step = (d) => {
+    if (lbIndex < 0 || !flat.length) return;
+    openLightbox((lbIndex + d + flat.length) % flat.length);
+  };
+
+  // re-render, then reopen on the same photo wherever it landed
+  function refresh(keep) {
+    render();
+    if (!keep) return;
+    const i = flat.indexOf(keep);
+    if (i >= 0) openLightbox(i); else closeLightbox();
+  }
+
+  function move(d) {
+    const p = current();
+    if (!p) return;
+    const from = state.photos.indexOf(p);
+    const to = from + d;
+    if (from < 0 || to < 0 || to >= state.photos.length) return;
+    state.photos.splice(from, 1);
+    state.photos.splice(to, 0, p);
+    refresh(p);
+    queueSave();
+  }
+
+  function setGroup(key) {
+    const p = current();
+    if (!p || !canWrite) return;
+    p.group = p.group === key ? undefined : key;
+    refresh(p);
+    queueSave();
+  }
+
+  function togglePick() {
+    const p = current();
+    if (!p || !canWrite) return;
+    p.pick = !p.pick;
+    refresh(p);
+    queueSave();
+  }
+
+  function removeCurrent() {
+    const p = current();
+    if (!p) return;
+    if (!deleteArmed) {
+      deleteArmed = true;
+      const b = $("lb-del");
+      b.textContent = "Click again to delete";
+      b.classList.add("armed");
+      deleteTimer = setTimeout(resetDelete, 4000);
+      return;
+    }
+    resetDelete();
+    const at = state.photos.indexOf(p);
+    if (at >= 0) state.photos.splice(at, 1);
+    if (!p.data) { deletedPaths.add(`photos/${p.id}.jpg`); pendingFiles.delete(`photos/${p.id}.jpg`); }
+    const url = blobUrls.get(p.id);
+    if (url) { URL.revokeObjectURL(url); blobUrls.delete(p.id); }
+    const at_flat = lbIndex;
+    render();
+    if (flat.length) openLightbox(Math.min(at_flat, flat.length - 1)); else closeLightbox();
+    queueSave();
+  }
+
+  function fieldEdit(key, value) {
+    const p = current();
+    if (!p) return;
+    p[key] = value;
+    const keep = p;
+    render();
+    lbIndex = flat.indexOf(keep);
+    syncLightboxControls();
+    queueSave();
+  }
+
+  /* ---------- wiring ---------- */
+
+  $("add-btn").addEventListener("click", () => fileInput.click());
+  $("empty-btn").addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", () => { addFiles(fileInput.files); fileInput.value = ""; });
+
+  let dragDepth = 0;
+  window.addEventListener("dragenter", (e) => {
+    if (!canWrite || !e.dataTransfer || !Array.from(e.dataTransfer.types).includes("Files")) return;
+    dragDepth++; document.body.classList.add("dragging");
+  });
+  window.addEventListener("dragover", (e) => { if (canWrite) e.preventDefault(); });
+  window.addEventListener("dragleave", () => { if (--dragDepth <= 0) { dragDepth = 0; document.body.classList.remove("dragging"); } });
+  window.addEventListener("drop", (e) => {
+    if (!canWrite) return;
+    e.preventDefault();
+    dragDepth = 0; document.body.classList.remove("dragging");
+    if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+  });
+
+  $("lb-close").addEventListener("click", closeLightbox);
+  $("lb-prev").addEventListener("click", () => step(-1));
+  $("lb-next").addEventListener("click", () => step(1));
+  $("lb-back").addEventListener("click", () => move(-1));
+  $("lb-fwd").addEventListener("click", () => move(1));
+  $("lb-del").addEventListener("click", removeCurrent);
+  $("lb-pick").addEventListener("click", togglePick);
+  document.querySelectorAll("[data-group]").forEach((b) => {
+    b.addEventListener("click", () => setGroup(b.dataset.group));
+  });
+  $("lb-title").addEventListener("input", (e) => fieldEdit("title", e.target.value));
+  $("lb-note").addEventListener("input", (e) => fieldEdit("note", e.target.value));
+  lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
+
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "Escape") closeLightbox();
+    else if (e.target.tagName === "INPUT") return;
+    else if (e.key === "ArrowLeft") step(-1);
+    else if (e.key === "ArrowRight") step(1);
+  });
+
+  ["site-title", "site-tagline"].forEach((id) => {
+    const el = $(id);
+    el.addEventListener("blur", () => { if (canWrite) queueSave(); });
+    el.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); el.blur(); } });
+  });
+
+  /* ---------- start ---------- */
+
+  (async () => {
+    state = await loadState();
+    state.photos = state.photos || [];
+    state.meta = state.meta || {};
+    applyMeta();
+    render();
+
+    // Published view-only: the page never requests the publish capability, so
+    // canWrite stays false, the title/tagline are never made contenteditable,
+    // and .read-only hides every owner control.
+    canWrite = false;
+    document.body.classList.add("read-only");
+  })();
+})();
+</script>

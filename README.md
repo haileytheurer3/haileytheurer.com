@@ -45,12 +45,43 @@ always cache.
 
 | Path | What it is |
 |---|---|
-| `index.html` | The homepage. Currently a placeholder. |
+| `index.html` | The homepage: the photo portfolio. Self-contained - all markup, CSS and JS in one file. |
+| `data/photos.json` | The photo list: id, dimensions, group, title, note, date added, pick flag. This is what the homepage reads to build the galleries. |
+| `photos/` | The images, one `<id>.jpg` per entry in `photos.json`, resized to 1600px on the long edge. |
+| `robots.txt` | Currently blocks all search engines. See "Search visibility" below. |
 | `404.html` | Shown for any URL that does not exist. |
 | `CNAME` | Tells GitHub Pages the site lives at `haileytheurer.com`. **Do not delete or rename this** - the custom domain stops working. |
 | `.nojekyll` | Stops Pages from running Jekyll. Without it, any file or folder whose name starts with `_` is silently dropped. **Leave it alone.** |
 
-## Adding pages
+## Adding or changing photos
+
+Two files move together, and they must stay in sync:
+
+1. Drop the image into `photos/` named `<id>.jpg`, where `<id>` is any short unique string
+2. Add a matching entry to the `photos` array in `data/photos.json`
+
+The fields are `id`, `w`, `h` (pixel dimensions), `title`, `note`, `added` (`YYYY-MM-DD`),
+`group` (`people`, `wildlife`, or `place`), and optionally `pick: true` with a `pickAt`
+number to feature it in the Selected Work row at the top.
+
+A photo listed in `photos.json` with no matching file shows as a broken image. A file in
+`photos/` with no entry in `photos.json` simply never appears.
+
+Keep images at roughly 1600px on the long edge. Full-size originals are archived outside
+this repo, in `~/obsession/projects/photography-portfolio/photos/`.
+
+## Search visibility
+
+The site is currently **hidden from Google**, by two things that have to agree:
+
+- `robots.txt` contains `Disallow: /`
+- `index.html` has `<meta name="robots" content="noindex, nofollow">`
+
+This came from when the portfolio was an unlisted link. To become findable by name,
+both have to change: `robots.txt` to `Allow: /`, and the meta tag to `index, follow`
+(or just deleted). Changing only one of them does nothing.
+
+## Adding other pages
 
 Create an HTML file and link to it. `about.html` is served at
 `haileytheurer.com/about.html`. For a cleaner URL, make a folder with an
@@ -59,10 +90,8 @@ Create an HTML file and link to it. `about.html` is served at
 Use root-relative paths in links and assets (`/styles.css`, not `styles.css`) so
 they resolve the same from any depth.
 
-## Notes
+## History
 
-- The site is public and so is this repo. Do not commit anything you would not
-  want read: credentials, API keys, private notes, unreleased work. There is a
-  `/private/` folder in `.gitignore` if you need somewhere local to stash things.
-- Keep an unpublished draft ready without shipping it by leaving it at its final
-  path and adding that path to `.gitignore`. Publish later by deleting the line.
+The portfolio began as a Claude artifact and was moved onto this domain on 2026-08-30.
+It previously lived at `haileytheurer3/photographs`, which is now retired. The local
+working copy is `~/obsession/projects/haileytheurer-com/`.
