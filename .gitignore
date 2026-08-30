@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+._*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Local notes - keep working files out of a public repo
+/private/
