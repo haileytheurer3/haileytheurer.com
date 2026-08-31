@@ -378,6 +378,9 @@
     if (p.w && p.h) { img.width = p.w; img.height = p.h; }
     img.addEventListener("error", () => { img.style.display = "none"; });
     img.addEventListener("load", () => img.classList.add("in"));
+    // Already decoded (a rotate-triggered relayout, or a return visit): show it
+    // straight away instead of fading in a picture that is already in hand.
+    if (img.complete && img.naturalWidth) img.classList.add("in");
     if (io) io.observe(img); else img.classList.add("in");
     btn.appendChild(img);
     btn.addEventListener("click", () => openLightbox(flat.indexOf(p)));
@@ -495,8 +498,14 @@
     sectionsEl.hidden = state.photos.length === 0;
   }
 
-  let relayoutTimer = null;
+  let relayoutTimer = null, lastWidth = window.innerWidth;
   window.addEventListener("resize", () => {
+    // Phones fire resize when the URL bar hides or reappears mid-scroll. That
+    // changes height only, and the row layout depends purely on width, so
+    // repainting would tear down and rebuild every image for nothing - which
+    // reads on screen as the gallery flashing while you scroll.
+    if (window.innerWidth === lastWidth) return;
+    lastWidth = window.innerWidth;
     clearTimeout(relayoutTimer);
     relayoutTimer = setTimeout(() => {
       document.querySelectorAll(".gallery").forEach((g) => { if (g._items) paintGrid(g, g._items); });
