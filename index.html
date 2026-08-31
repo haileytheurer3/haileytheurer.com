@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&display=swap">
 
-<script type="application/json" id="portfolio-state">{"version": 2, "meta": {"title": "Hailey's Photographs", "tagline": "Hailey Theurer \u00b7 people, wildlife, and place \u00b7 made on a phone"}, "photos": []}</script>
+<script type="application/json" id="portfolio-state">{"version": 2, "meta": {"title": "Hailey's Photographs", "tagline": "Hailey Theurer \u00b7 people, wildlife, and place \u00b7 shot on an iPhone"}, "photos": []}</script>
 
 <style>
   :root {
@@ -257,7 +257,9 @@
   <header class="mast">
     <div class="identity">
       <h1 id="site-title">Hailey's Photographs</h1>
-      <p class="tagline" id="site-tagline">A working portfolio</p>
+      <!-- Matches meta.tagline in data/photos.json. Kept in sync so the line
+           does not visibly swap when applyMeta() runs after load. -->
+      <p class="tagline" id="site-tagline">Hailey Theurer · people, wildlife, and place · shot on an iPhone</p>
     </div>
     <div class="actions">
       <span class="status" id="status"></span>
